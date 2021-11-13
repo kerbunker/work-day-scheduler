@@ -6,6 +6,7 @@ currentDayEl.text(currentMoment.format('MMMM Do YYYY'));
 console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
 var sevenOClock = moment().hour(10);
 console.log(sevenOClock);
+var eventData = [];
 
 var setBackground = function() {
     for (var i = 0; i < 9; i++) {
@@ -43,9 +44,13 @@ $(".time-block").on("click", ".text-block", function() {
 });
 
 $(".time-block").on("click", ".saveBtn", function() {
+    // checks if the div to save was a text form to change text, otherwise, nothing needs to be changed
+    if (!$(this).prev().hasClass("text-form")) {
+        return;
+    }
     var text = $(this).prev().val();
     var textID = $(this).prev().attr("id");
-    console.log(text);
+    //console.log(text);
 
     var descP = $("<div>").addClass("col-10 text-block").attr("id", textID).text(text);
     if ($(this).prev().hasClass("past")) {
@@ -56,7 +61,36 @@ $(".time-block").on("click", ".saveBtn", function() {
         descP.addClass("future");
     }
     $(this).prev().replaceWith(descP);
-    setBackground()
+    setBackground();
+    var index = $(this).prev().attr("id");
+    index = index.substr(index.length-1, 1);
+    index = parseInt(index);
+    if (eventData[index]) {
+        eventData[index].text = text;
+    } else {
+        eventData[index] = {
+            hour: index + 9,
+            text: text
+        };
+    }
+    saveData();
 });
 
+var saveData = function() {
+    localStorage.setItem("data", JSON.stringify(eventData))
+};
+
+var loadData = function() {
+    eventData = JSON.parse(localStorage.getItem("data"));
+    if (!eventData) {
+        eventData = [];
+    }
+    for (var i = 0; i < 8; i++) {
+        if (eventData[i]) {
+            $("#hour-" + i).text(eventData[i].text);
+        }
+    }
+}
+
 setBackground();
+loadData();
