@@ -34,4 +34,4 @@
 
  * Deployed Site: [https://kerbunker.github.io/work-day-scheduler/](https://kerbunker.github.io/work-day-scheduler/)
 
-![screenshot](/assets/images/page-screenshot.PNG)
+![daily planner with added text and colors per hour](/assets/images/page-screenshot.png)
